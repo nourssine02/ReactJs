@@ -1,0 +1,84 @@
+import React, { useState } from 'react'
+import { Data } from "./Data";
+import Table  from 'react-bootstrap/Table'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const FilterBar = () =>{
+    const [searchVal, setSearchVal] = useState('');
+    const [searchColumns, setSearchColumns] = useState('')
+    return (
+        <div className="Container">
+            <input type="text" placeholder="Search..." className="form-control"  onChange={(event) =>{
+                setSearchVal(event.target.value);
+                
+            }}/>
+            <select   class="form-control"  > 
+                <option  selected ={searchColumns.includes(searchVal.toLocaleLowerCase())} 
+                  onChange={(e) => {
+                    const selected = searchColumns.includes(searchVal.toLocaleLowerCase());
+                    setSearchColumns((prev) =>
+                    selected
+                        ? prev.filter((sc) => sc !== searchVal)
+                        : [...prev, searchVal],
+                    );
+                  }}
+                >{searchVal}</option>
+                <option value="gender">gender</option>
+                <option value="name">name</option>
+                <option value="age">age</option>
+                <option value="email">email</option>
+                <option value="phone">phone</option>
+                <option value="address">address</option>
+                <option value="balance">balance</option>
+                <option value="likes">likes</option>
+                <option value="rating">rating</option>
+            
+            </select>
+            <Table>
+                <thead>
+                    <tr>
+                        <th>gender</th>
+                        <th>name</th>
+                        <th>age</th>
+                        <th>email</th>
+                        <th>phone</th>
+                        <th>address</th>
+                        <th>balance</th>
+                        <th>likes</th>
+                        <th>rating</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                {Data.filter((m) =>{
+                    if(searchVal === ""){
+                        return m;
+                    }
+                    else if(
+                        m.name.toLocaleLowerCase().includes(searchVal.toLocaleLowerCase())||
+                        m.email.toLocaleLowerCase().includes(searchVal.toLocaleLowerCase())||
+                        m.address.toLocaleLowerCase().includes(searchVal.toLocaleLowerCase())||
+                        m.gender.toLocaleLowerCase().includes(searchVal.toLocaleLowerCase())
+                 
+                    ){
+                        return m;
+                    }
+                }).map((val) =>(
+               <tr key={val.id}>
+                <td>{val.gender}</td>
+                <td>{val.name}</td>
+                <td>{val.age}</td>
+                <td>{val.email}</td>
+                <td>{val.phone}</td>
+                <td>{val.address}</td>
+                <td>{val.balance}</td>
+                <td>{val.likes}</td>
+                <td>{val.rating}</td>
+                </tr>
+                ))}
+                </tbody>
+            </Table>
+        </div>
+    )
+}
+export default FilterBar
